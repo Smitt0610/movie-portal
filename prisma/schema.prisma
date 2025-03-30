@@ -8,8 +8,9 @@ generator client {
 }
 
 model Movie {
-id String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   actors     String[]
   releaseYear Int
 }
+
