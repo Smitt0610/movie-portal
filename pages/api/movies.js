@@ -1,7 +1,4 @@
-import prisma from "@/lib/prisma";
-
-const prisma = global.prisma || new PrismaClient();
-if (process.env.NODE_ENV === "development") global.prisma = prisma;
+import prisma from '@/lib/prisma'; // use "../../lib/prisma" if alias doesn't work
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -19,42 +16,21 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Missing required fields" });
       }
 
-      const newMovie = await prisma.movie.create({
+      const movie = await prisma.movie.create({
         data: {
           title,
           actors,
-          releaseYear: parseInt(releaseYear),
+          releaseYear: parseInt(releaseYear)
         },
       });
 
-      return res.status(201).json(newMovie);
+      return res.status(201).json(movie);
     }
 
-    if (method === "PUT") {
-      const { id, ...updateData } = req.body;
-
-      const updated = await prisma.movie.update({
-        where: { id },
-        data: updateData,
-      });
-
-      return res.status(200).json(updated);
-    }
-
-    if (method === "DELETE") {
-      const { deleteId } = req.body;
-
-      await prisma.movie.delete({
-        where: { id: deleteId },
-      });
-
-      return res.status(200).json({ message: "Deleted" });
-    }
-
-    res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
-    res.status(405).end(`Method ${method} Not Allowed`);
-  } catch (err) {
-    console.error("🔥 API ERROR:", err);
-    res.status(500).json({ error: err.message || "Server Error" });
+    res.setHeader("Allow", ["GET", "POST"]);
+    return res.status(405).end(`Method ${method} Not Allowed`);
+  } catch (error) {
+    console.error("API ERROR:", error);
+    return res.status(500).json({ error: error.message || "Server error" });
   }
 }
