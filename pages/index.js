@@ -9,10 +9,21 @@ export default function Home() {
   const [editingMovie, setEditingMovie] = useState(null);
 
   const fetchMovies = async () => {
-    const res = await fetch("/api/movies");
-    const data = await res.json();
-    setMovies(data);
+    try {
+      const res = await fetch("/api/movies");
+      const data = await res.json();
+  
+      if (!Array.isArray(data)) {
+        console.error("Invalid data from API:", data);
+        return;
+      }
+  
+      setMovies(data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
   };
+  
 
   useEffect(() => {
     fetchMovies();
