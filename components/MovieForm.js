@@ -36,12 +36,13 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
     }
 
     onSubmit(movieData);
-
-    // Clear form
     setTitle("");
     setActors("");
     setReleaseYear("");
   };
+
+  const inputClass =
+    "mt-1 w-full text-black border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder-gray-500";
 
   return (
     <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-xl p-6 mb-6 border border-gray-200">
@@ -53,7 +54,7 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="mt-1 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder:text-gray-500"
+          className={inputClass}
           placeholder="Movie title"
         />
       </div>
@@ -64,7 +65,7 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
           type="text"
           value={actors}
           onChange={(e) => setActors(e.target.value)}
-          className="mt-1 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder:text-gray-500"
+          className={inputClass}
           placeholder="e.g. Tom Hanks, Tim Allen"
         />
       </div>
@@ -75,7 +76,7 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
           type="number"
           value={releaseYear}
           onChange={(e) => setReleaseYear(e.target.value)}
-          className="mt-1 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder:text-gray-500"
+          className={inputClass}
           placeholder="e.g. 1999"
         />
       </div>
