@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from '../../lib/prisma';
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -32,7 +32,11 @@ export default async function handler(req, res) {
 
       const updated = await prisma.movie.update({
         where: { id },
-        data: { title, actors, releaseYear: parseInt(releaseYear) },
+        data: {
+          title,
+          actors,
+          releaseYear: parseInt(releaseYear),
+        },
       });
 
       return res.status(200).json(updated);
