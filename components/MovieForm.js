@@ -42,11 +42,13 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
   };
 
   const inputClass =
-    "mt-1 w-full text-black border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder-gray-500";
+    "mt-1 w-full text-gray-800 border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder-gray-500";
 
   return (
     <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-xl p-6 mb-6 border border-gray-200">
-      <h2 className="text-xl font-semibold mb-4 text-gray-700">{editingMovie ? "Edit Movie" : "Add New Movie"}</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-700">
+        {editingMovie ? "Edit Movie" : "Add New Movie"}
+      </h2>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">Title</label>
