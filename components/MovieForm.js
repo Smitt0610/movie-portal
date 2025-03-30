@@ -19,13 +19,14 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title || !actors || !releaseYear) {
-      alert("All fields are required!");
+
+    if (!title.trim() || !actors.trim() || !releaseYear || releaseYear < 1900) {
+      alert("Please fill all fields correctly. Release year must be after 1900.");
       return;
     }
 
     const movieData = {
-      title,
+      title: title.trim(),
       actors: actors.split(",").map(actor => actor.trim()),
       releaseYear: parseInt(releaseYear),
     };
@@ -35,6 +36,8 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
     }
 
     onSubmit(movieData);
+
+    // Clear form
     setTitle("");
     setActors("");
     setReleaseYear("");
@@ -50,7 +53,7 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="mt-1 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+          className="mt-1 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder:text-gray-500"
           placeholder="Movie title"
         />
       </div>
@@ -61,7 +64,7 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
           type="text"
           value={actors}
           onChange={(e) => setActors(e.target.value)}
-          className="mt-1 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+          className="mt-1 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder:text-gray-500"
           placeholder="e.g. Tom Hanks, Tim Allen"
         />
       </div>
@@ -72,7 +75,7 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
           type="number"
           value={releaseYear}
           onChange={(e) => setReleaseYear(e.target.value)}
-          className="mt-1 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+          className="mt-1 w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder:text-gray-500"
           placeholder="e.g. 1999"
         />
       </div>
