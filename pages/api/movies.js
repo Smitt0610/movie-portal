@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma'; // use "../../lib/prisma" if alias doesn't work
+import prisma from "@/lib/prisma";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -20,14 +20,35 @@ export default async function handler(req, res) {
         data: {
           title,
           actors,
-          releaseYear: parseInt(releaseYear)
+          releaseYear: parseInt(releaseYear),
         },
       });
 
       return res.status(201).json(movie);
     }
 
-    res.setHeader("Allow", ["GET", "POST"]);
+    if (method === "PUT") {
+      const { id, title, actors, releaseYear } = req.body;
+
+      const updated = await prisma.movie.update({
+        where: { id },
+        data: { title, actors, releaseYear: parseInt(releaseYear) },
+      });
+
+      return res.status(200).json(updated);
+    }
+
+    if (method === "DELETE") {
+      const { deleteId } = req.body;
+
+      await prisma.movie.delete({
+        where: { id: deleteId },
+      });
+
+      return res.status(200).json({ message: "Deleted successfully" });
+    }
+
+    res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
     return res.status(405).end(`Method ${method} Not Allowed`);
   } catch (error) {
     console.error("API ERROR:", error);
