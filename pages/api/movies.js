@@ -1,59 +1,60 @@
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+const prisma = global.prisma || new PrismaClient();
+if (process.env.NODE_ENV === "development") global.prisma = prisma;
 
 export default async function handler(req, res) {
   const { method } = req;
 
   try {
-    switch (method) {
-      case "GET":
-        const movies = await prisma.movie.findMany();
-        return res.status(200).json(movies);
-
-      case "POST":
-        const { title, actors, releaseYear } = req.body;
-        console.log("📥 POST Data:", { title, actors, releaseYear });
-
-        if (!title || !actors || !releaseYear) {
-          return res.status(400).json({ error: "Missing fields" });
-        }
-
-        const newMovie = await prisma.movie.create({
-          data: {
-            title,
-            actors,
-            releaseYear: parseInt(releaseYear),
-          },
-        });
-
-        return res.status(201).json(newMovie);
-
-      case "PUT":
-        const { id, ...updateData } = req.body;
-
-        const updatedMovie = await prisma.movie.update({
-          where: { id },
-          data: updateData,
-        });
-
-        return res.status(200).json(updatedMovie);
-
-      case "DELETE":
-        const { deleteId } = req.body;
-
-        await prisma.movie.delete({
-          where: { id: deleteId },
-        });
-
-        return res.status(200).json({ message: "Movie deleted" });
-
-      default:
-        res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
-        return res.status(405).end(`Method ${method} Not Allowed`);
+    if (method === "GET") {
+      const movies = await prisma.movie.findMany();
+      return res.status(200).json(movies);
     }
-  } catch (error) {
-    console.error("❌ API Error:", error); // this will show in Vercel logs
-    return res.status(500).json({ error: error.message });
+
+    if (method === "POST") {
+      const { title, actors, releaseYear } = req.body;
+
+      if (!title || !actors || !releaseYear) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const newMovie = await prisma.movie.create({
+        data: {
+          title,
+          actors,
+          releaseYear: parseInt(releaseYear),
+        },
+      });
+
+      return res.status(201).json(newMovie);
+    }
+
+    if (method === "PUT") {
+      const { id, ...updateData } = req.body;
+
+      const updated = await prisma.movie.update({
+        where: { id },
+        data: updateData,
+      });
+
+      return res.status(200).json(updated);
+    }
+
+    if (method === "DELETE") {
+      const { deleteId } = req.body;
+
+      await prisma.movie.delete({
+        where: { id: deleteId },
+      });
+
+      return res.status(200).json({ message: "Deleted" });
+    }
+
+    res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
+    res.status(405).end(`Method ${method} Not Allowed`);
+  } catch (err) {
+    console.error("🔥 API ERROR:", err);
+    res.status(500).json({ error: err.message || "Server Error" });
   }
 }
