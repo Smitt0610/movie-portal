@@ -13,8 +13,7 @@ export default async function handler(req, res) {
 
       case "POST":
         const { title, actors, releaseYear } = req.body;
-
-        console.log("📥 POST Request:", { title, actors, releaseYear });
+        console.log("📥 POST Data:", { title, actors, releaseYear });
 
         if (!title || !actors || !releaseYear) {
           return res.status(400).json({ error: "Missing fields" });
@@ -54,7 +53,7 @@ export default async function handler(req, res) {
         return res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
-    console.error("❌ API Error:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    console.error("❌ API Error:", error); // this will show in Vercel logs
+    return res.status(500).json({ error: error.message });
   }
 }
