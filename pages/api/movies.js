@@ -9,11 +9,17 @@ export default async function handler(req, res) {
     switch (method) {
       case "GET":
         const movies = await prisma.movie.findMany();
-        res.status(200).json(movies);
-        break;
+        return res.status(200).json(movies);
 
       case "POST":
         const { title, actors, releaseYear } = req.body;
+
+        console.log("📥 POST Request:", { title, actors, releaseYear });
+
+        if (!title || !actors || !releaseYear) {
+          return res.status(400).json({ error: "Missing fields" });
+        }
+
         const newMovie = await prisma.movie.create({
           data: {
             title,
@@ -21,32 +27,34 @@ export default async function handler(req, res) {
             releaseYear: parseInt(releaseYear),
           },
         });
-        res.status(201).json(newMovie);
-        break;
+
+        return res.status(201).json(newMovie);
 
       case "PUT":
         const { id, ...updateData } = req.body;
+
         const updatedMovie = await prisma.movie.update({
           where: { id },
           data: updateData,
         });
-        res.status(200).json(updatedMovie);
-        break;
+
+        return res.status(200).json(updatedMovie);
 
       case "DELETE":
         const { deleteId } = req.body;
+
         await prisma.movie.delete({
           where: { id: deleteId },
         });
-        res.status(200).json({ message: "Movie deleted" });
-        break;
+
+        return res.status(200).json({ message: "Movie deleted" });
 
       default:
         res.setHeader("Allow", ["GET", "POST", "PUT", "DELETE"]);
-        res.status(405).end(`Method ${method} Not Allowed`);
+        return res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    console.error("❌ API Error:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }
