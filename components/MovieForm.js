@@ -27,7 +27,7 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
 
     const movieData = {
       title: title.trim(),
-      actors: actors.split(",").map(actor => actor.trim()),
+      actors: actors.split(",").map((actor) => actor.trim()),
       releaseYear: parseInt(releaseYear),
     };
 
@@ -42,16 +42,19 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
   };
 
   const inputClass =
-    "mt-1 w-full text-gray-800 border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-500 placeholder-gray-500";
+    "mt-1 w-full text-gray-800 border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 placeholder-gray-400 shadow-sm transition";
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-xl p-6 mb-6 border border-gray-200">
-      <h2 className="text-xl font-semibold mb-4 text-gray-700">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white shadow-xl rounded-2xl p-8 mb-8 border border-gray-200 max-w-xl mx-auto"
+    >
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800 tracking-tight">
         {editingMovie ? "Edit Movie" : "Add New Movie"}
       </h2>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Title</label>
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-gray-600 mb-1">Title</label>
         <input
           type="text"
           value={title}
@@ -61,8 +64,8 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
         />
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Actors (comma-separated)</label>
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-gray-600 mb-1">Actors (comma-separated)</label>
         <input
           type="text"
           value={actors}
@@ -72,8 +75,8 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
         />
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Release Year</label>
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-600 mb-1">Release Year</label>
         <input
           type="number"
           value={releaseYear}
@@ -83,10 +86,10 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
         />
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-4 justify-start">
         <button
           type="submit"
-          className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-md shadow"
+          className="bg-green-500 hover:bg-green-600 transition text-white px-6 py-2 rounded-lg shadow-md"
         >
           {editingMovie ? "Update Movie" : "Add Movie"}
         </button>
@@ -95,7 +98,7 @@ export default function MovieForm({ onSubmit, editingMovie, cancelEdit }) {
           <button
             type="button"
             onClick={cancelEdit}
-            className="bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded-md"
+            className="bg-gray-400 hover:bg-gray-500 transition text-white px-6 py-2 rounded-lg shadow-md"
           >
             Cancel
           </button>
